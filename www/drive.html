@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+	<script src="js/vendor/enchant-0.8.2.js"></script>
+	<script src="js/vendor/CarEngine.js"></script>
+	<script src="js/mapOriginal.js"></script>
+	<script src="js/mapLaMadonna.js"></script>
+	<script src="js/mapLaMadonna2.js"></script>
+	<script src="js/JoowarGame.js"></script>
+	<title>Joowar Beirut</title>
+</head>
+<body>
+<script>
+var parArr = window.location.search.split("?")[1].split("&")[0].split("=")[1];
+mo1=null;
+switch(parArr) {
+case "mapLaMadonna": mo1=mapLaMadonna(); break;
+case "mapLaMadonna2": mo1=mapLaMadonna2(); break;
+default: console.log("WTF");
+}
+var jg=new JoowarGame(mo1);
+jg.start();
+</script>
+</body>
+</html>

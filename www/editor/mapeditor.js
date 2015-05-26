@@ -231,11 +231,7 @@ function start(mapWidth, mapHeight, gameImage, extend) {
 
 		var addTabButton = document.getElementById('addTabButton');
 		addTabButton.onclick = function() {
-			var tabs = document.getElementById('tabs');
 			bgMap.addData(makeArray(app.mapWidth, app.mapHeight, -1));
-			var num = tabs.childNodes.length - 1;
-			editorTabs.addNewTab('bgtab' + num, 'layer' + num);
-			editorTabs.applyColors();
 		};
 
     };

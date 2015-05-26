@@ -1,53 +1,11 @@
 window.onload = function() {
 	enchant();
 	var stage = document.getElementById('enchant-stage');
-	stage.appendChild(mapForm.create());
-	document.getElementById('checkbox').checked = true;
-}
-var app = {};
-app.maps= {};
-app.imagePath = '';
-app.typeEdit = true;
-app.extendMode = false;
-app.editFunc = 'change';
-app.selectedLayer = 0;
-app.selectedType = 0;
-app.selectedData = 0;
-app.mapWidth = 0;
-app.mapHeight = 0;
 
-var mapForm = {
-	widthBox: (function() {
-		var element = document.createElement('input');
-		element.type = 'text';
-		element.id = 'widthBox';
-		return element;
-	})(),
-	heightBox: (function() {
-		var element = document.createElement('input');                               
-		element.type = 'text';
-		element.id = 'heightBox';                                                
-		return element;
-	})(),
-	imageMenu: (function() {
-		var element = document.createElement('select');
-		element.id = 'select';
-		element.options[0] = new Option('RPG', 'map0.gif');
-		element.options[1] = new Option('2D Scroll', 'map1.gif');
-		element.options[2] = new Option('Joowar Beirut', '../img/map2-joowarBeirut-V20150517-1.gif');
-		return element;
-	})(),
-	extendOption: (function() {
-		var element = document.createElement('input');
-		element.type = 'checkbox';
-		element.id = 'checkbox';
-		return element;
-	})(),
-	acceptButton: (function() {
-		var element = document.createElement('input');                            
-		element.type = 'button';                                              
-		element.value = 'Create Blank Map';
-		element.onclick = function() {
+	$("#edit").hide();
+	$("#acceptButton").click(function() {
+			$("#edit").show();
+
 			var w = document.getElementById('widthBox');
 			var h = document.getElementById('heightBox');                               
 			var img = document.getElementById('select');
@@ -70,9 +28,6 @@ var mapForm = {
 						return;
 					}
 					start(wv, hv, iv, ev);
-					edit.innerHTML+= '(Use Arrow Keys to Scroll)';
-					editorTabs.initialize();
-					edit.appendChild(editorTabs.element);
 					edit.appendChild(icons.create());
 					var d = document.createElement('div');
 					d.appendChild(palette);
@@ -93,97 +48,31 @@ var mapForm = {
 			} else {
 				alert("input number");                                                  
 			}                                                                          
-		};                     
-		return element;
-	})(),
-	create: function() {
-		var form = document.createElement('div');
-		form.innerHTML += 'Width (px): ';
-		form.appendChild(this.widthBox);
-		form.innerHTML += '<br />Height (px): ';
-		form.appendChild(this.heightBox);
-		form.innerHTML += '<br />Image Set: ';
-		form.appendChild(this.imageMenu);
-		form.innerHTML += '<br />Enable extended mode (leave checked)';
-		form.appendChild(this.extendOption);
-		form.innerHTML += '<br />';
-		form.appendChild(this.acceptButton);
-		return form;
-	}
-};
+		});
 
-var editorTabs = {
-	tabs: [],
-	element: (function() {
-		var element = document.createElement('div');
-		element.id = 'tabs';
-		element.style.width = '360px';
-		element.style.height = '0px';
-		return element;
-	})(),
-	initialize: function() {
-		this.element.appendChild(this.addTabButton);
-		this.addNewTab('coltab', 'impassable');
-		this.addNewTab('bgtab1', 'layer1', true);
-		this.addNewTab('bgtab2', 'layer2');
-		this.applyColors();
-	},
-	addNewTab: function(id, name, active) {
-		var element = document.createElement('div');
-		element.style.width = '84px';
-		element.style.height = '20px';
-		element.style.float = 'left';
-		element.style['text-align'] = 'center';
-		element.id = id;
-		element.innerText = name;
-		if (active) {
-			element.isActive = true;
-		} else {
-			element.isActive = false;
-		}
-		element.tabNum = this.element.childNodes.length - 2;
-		element.onclick = function() {
-			app.selectedLayer = this.tabNum;
-			editorTabs.changeActive();
-		};
-		this.element.insertBefore(element, this.addTabButton);
-		if (this.element.childNodes.length % 4 == 2) {
-			var height = this.element.style.height;
-			this.element.style.height = parseInt(height) + 20 + 'px';
-		}
-	},
-	addTabButton: (function() {
-		var element = document.createElement('div');
-		element.id = 'addTabButton';
-		element.style.width = '20px';
-		element.style.height = '20px';
-		element.style.float = 'left';
-		element.style.backgroundColor = 'rgb(85,85,85)',
-		element.style['text-align'] = 'center';
-		element.innerText = '+';
-		return element;
-	})(),
-	applyColors: function() {
-		var data = this.element.childNodes;
-		for (var i = 0, l = data.length; i < l; i++) {
-			if (data[i].isActive) {
-				data[i].style.backgroundColor = 'rgb(51, 85, 119)';
-				data[i].style.color = 'rgb(0, 0, 0)';
-			} else {
-				data[i].style.backgroundColor = 'rgb(85, 85, 85)';
-				data[i].style.color = 'rgb(119, 119, 119)';
-			}
-		}
-	},
-	changeActive: function() {
-		var data = this.element.childNodes;
-		for (var i = 0, l = data.length; i < l; i++) {
-			data[i].isActive = false;
-		}
-		data[app.selectedLayer+1].isActive = true;
-		this.applyColors();
-	}
-};
+		$("#coltab").click(function() {
+			app.selectedLayer = 0;
+		});
+		$("#bgtab1").click(function() {
+			app.selectedLayer = 1;
+		});
+		$("#bgtab2").click(function() {
+			app.selectedLayer = 2;
+		});
+
+}
+var app = {};
+app.maps= {};
+app.imagePath = '';
+app.typeEdit = true;
+app.extendMode = false;
+app.editFunc = 'change';
+app.selectedLayer = 0;
+app.selectedType = 0;
+app.selectedData = 0;
+app.mapWidth = 0;
+app.mapHeight = 0;
+
 
 var palette = (function() {
 	var element = document.createElement('canvas');
@@ -384,11 +273,10 @@ w=window;
 				}
 			} else if (length > num) {
 				for (var i = num; i < length; i++) {
-					editorTabs.addNewTab('bgtab' + i, 'layer' + i);
+angular.element(document.getElementById('Controller2_editorTabs')).scope().controller.addNewTab('bgtab' + i, 'layer' + i);
 				}
 			}
 			app.frame.changeSize(app.mapWidth, app.mapHeight);
-			editorTabs.applyColors();
 	//		w.close();
 		};
 		w.document.body.appendChild(input);
@@ -432,11 +320,10 @@ var loadJsonButton = (function() {
 				}
 			} else if (length > num) {
 				for (var i = num; i < length; i++) {
-					editorTabs.addNewTab('bgtab' + i, 'layer' + i);
+angular.element(document.getElementById('Controller2_editorTabs')).scope().controller.addNewTab('bgtab' + i, 'layer' + i);
 				}
 			}
 			app.frame.changeSize(app.mapWidth, app.mapHeight);
-			editorTabs.applyColors();
 
 		}
 	    }

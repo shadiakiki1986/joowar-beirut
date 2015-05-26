@@ -3,26 +3,52 @@
     <head>
         <meta charset="utf-8">
         <title>enchant MapEditor</title>
-        <link href='../css/vendor/google-font-titillium.css' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="tutorial.css">
         <script type="text/javascript" src="../js/vendor/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="../js/vendor/FileSaver.min.js"></script>
         <script type="text/javascript" src="../js/vendor/enchant-0.8.2.js"></script>
 	<script type="text/javascript" src="plugins/extendMap.enchant.js"></script>
+        <script type="text/javascript" src="../js/config.js"></script>
+        <script type="text/javascript" src="../js/vendor/angular-1.2.28.min.js"></script>
+        <script type="text/javascript" src="Controller2_editorTabs.js"></script>
+
         <script type="text/javascript" src="drawing.js"></script>
         <script type="text/javascript" src="main.js"></script>
         <script type="text/javascript" src="mapeditor.js"></script>
+
     </head>
     <body>
-	<div id="enchant-stage" style="width: 640px; height: 480px; float:left"></div>
-	<div id="edit" style="width: 360px; margin-left: 640px"></div>
-    <div id="tutorial" style="width: 120px; height: 100px; float: right; margin-right:20px; text-align:center;"><p><a href="#" onclick="$('#fademe').fadeIn(); $('#main').fadeIn()">Show me how to use this</a></p></div>
+	<div id="enchant-stage" style="width: 640px; height: 480px; float:left">
+		<div>
+		Width (px): <input type = 'text' id = 'widthBox'>
+		<br />Height (px): <input type = 'text' id = 'heightBox'>
+		<br />Image Set: <select id = 'select'>
+		<option value="map0.gif">RPG</option>
+		<option value="map1.gif">2D Scroll</option>
+		<option value="../img/map2-joowarBeirut-V20150517-1.gif">Joowar Beirut</option>
+		</select>
+		<br />Enable extended mode (leave checked):<input type = 'checkbox' id = 'checkbox' checked>
+		<br />
+		<input type = 'button' value = 'Create Blank Map' id="acceptButton">
+		</div>
+	</div>
+
+	<div id="edit" style="width: 360px; margin-left: 640px" ng-app ng-controller="Controller2_editorTabs" hidden>
+	(Use Arrow Keys to Scroll)
+	<div id = 'tabs' style="width:360px; height:{{mainTabHeight()}}">
+		<div ng-repeat="t in tabs" id = '{{t.id}}' style="width:84px;height:20px;float:left;text-align:center;{{tabColor(t.id)}}" ng-click="changeActive(t.id)">{{t.name}}</div>
+		<div id = 'addTabButton' style="width:20px;height:20px;float:left;backgroundColor:rgb(85,85,85);text-align:center;" ng-click="addNewTabAuto()">+</div>
+	</div>
+	</div>
+
+    <div id="tutorial" style="width: 120px; height: 100px; float: right; margin-right:20px; text-align:center;"><p>
+	<a href="#" onclick="$('#fademe').fadeIn(); $('#main').fadeIn()">Show me how to use this</a>
+    </p></div>
 
     <div id="fademe" class="fademe" style=""></div>
     <div class="main" id="main" style="float:left; display:none;">
         <div id="close"><a href="#" onclick="$('#fademe').fadeOut(); $('#main').fadeOut(); return false;">X</a></div>
         <h1>What This Is and How to Use It</h1>
-        <p class="centerLink"><a href="tutorial.html" target="_blank" onclick="$('#fademe').fadeOut(); $('#main').fadeOut();">Open in new window</a></p>
         <h2>The enchant.js Map Editor</h2>
         <p>This is a tool written in JavaScript for quickly creating maps for use with enchant.js. More specifically, since maps in enchant.js images placed in an array from a tileset, this tool is used to generate those arrays. This saves you from having to manually type out the array.</p>
         <h2>How do I use it?</h2>

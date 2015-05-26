@@ -1,6 +1,10 @@
 <!doctype html>
 <html>
 <head>
+        <script type="text/javascript" src="js/vendor/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="js/vendor/angular-1.2.28.min.js"></script>
+        <script type="text/javascript" src="js/Controller1_ListMaps.js"></script>
+        <script type="text/javascript" src="js/config.js"></script>
 	<title>Joowar Beirut</title>
 </head>
 <body>
@@ -27,5 +31,11 @@
 	</li>
 	</ul>
 
+	<div ng-app>
+	Areas on server
+	<ul ng-controller="Controller1_ListMaps">
+	<li ng-repeat="m in maps">{{m}}: <a href="editor/mapeditor.html?serverMap={{m}}">Edit</a></li>
+	</ul>
+	</div>
 </body>
 </html>

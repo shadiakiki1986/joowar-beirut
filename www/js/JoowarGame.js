@@ -2,7 +2,7 @@ function JoowarGame(mo1) {
 	this.start=function() {
 	    enchant(); // initialize
 	    var game = new Core(320, 320);
-	    game.preload('img/vendor/car.png', 'img/'+mo1.map, 'img/vendor/car2.png'); // preload image
+	    game.preload('img/vendor/car.png', 'img/'+mo1.map); // preload image
 	    game.fps = 20;
 	    game.score=0;
 

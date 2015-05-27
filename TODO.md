@@ -1,3 +1,4 @@
+* editor: test loading file from json using browse button
 * drive: download map from server
 * editor: download from server, upload to server
 * index: list maps on server

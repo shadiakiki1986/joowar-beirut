@@ -7,7 +7,7 @@
         <script type="text/javascript" src="../js/vendor/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="../js/vendor/FileSaver.min.js"></script>
 <!--        <script type="text/javascript" src="../js/vendor/enchant-0.8.2.js"></script>-->
--        <script type="text/javascript" src="../js/vendor/enchant-0.3.js"></script>
+        <script type="text/javascript" src="../js/vendor/enchant-0.3.js"></script>
 
 	<script type="text/javascript" src="plugins/extendMap.enchant.js"></script>
         <script type="text/javascript" src="../js/config.js"></script>
@@ -36,12 +36,22 @@
 	</div>
 
 	<div id="edit" style="width: 360px; margin-left: 640px" ng-app ng-controller="Controller2_editorTabs" hidden>
-	(Use Arrow Keys to Scroll)
-	<div id = 'tabs' style="width:360px; height:{{mainTabHeight()}}">
-		<div ng-repeat="t in tabs" id = '{{t.id}}' style="width:84px;height:20px;float:left;text-align:center;{{tabColor(t.id)}}" ng-click="changeActive(t.id)">{{t.name}}</div>
-		<div id = 'addTabButton' style="width:20px;height:20px;float:left;backgroundColor:rgb(85,85,85);text-align:center;" ng-click="addNewTabAuto()">+</div>
-	</div>
-	</div>
+		(Use Arrow Keys to Scroll)
+		<div id = 'tabs' style="width:360px; height:{{mainTabHeight()}}">
+			<div ng-repeat="t in tabs" id = '{{t.id}}' style="width:84px;height:20px;float:left;text-align:center;{{tabColor(t.id)}}" ng-click="changeActive(t.id)">{{t.name}}</div>
+			<div id = 'addTabButton' style="width:20px;height:20px;float:left;backgroundColor:rgb(85,85,85);text-align:center;" ng-click="addNewTabAuto()">+</div>
+		</div>
+		<div style="height:48px"><canvas id="rectIcon" width=336 height=48></canvas></div>
+		<div><canvas width=256 height=256 id="paletteCanvas"></canvas></div>
+		<div id="loadGenDiv">
+			<input type="button" id="loadButton" value="Import Code"></input>
+			<input type="button" id="geneButton" value="Generate Code"></input>
+			<br>Json file<br>
+			<input type="file" id = 'loadJsonButton'></input>
+			<br>
+			<input type = 'button' id = 'geneButton2' value = 'Generate json'></input>
+		</div>
+	</div> <!-- end div edit -->
 
     <div id="tutorial" style="width: 120px; height: 100px; float: right; margin-right:20px; text-align:center;"><p>
 	<a href="#" onclick="$('#fademe').fadeIn(); $('#main').fadeIn()">Show me how to use this</a>

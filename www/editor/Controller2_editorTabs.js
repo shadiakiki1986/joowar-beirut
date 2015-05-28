@@ -1,4 +1,4 @@
-function Controller2_editorTabs($scope) {
+function Controller2_editorTabs($scope,$http) {
 
 	$scope.tabs=[];
 	$scope.tabNum = function(id) {
@@ -35,11 +35,32 @@ function Controller2_editorTabs($scope) {
 	};
 
 	angular.element(document).ready(function () {
-	$scope.$apply(function() {
-		$scope.addNewTab("coltab","impassable",false);
-		$scope.addNewTab("bgtab1","layer1",true);
-		$scope.addNewTab("bgtab2","layer2",false);
+		$scope.$apply(function() {
+			$scope.addNewTab("coltab","impassable",false);
+			$scope.addNewTab("bgtab1","layer1",true);
+			$scope.addNewTab("bgtab2","layer2",false);
+		});
 	});
-	});
+
+	$scope.uploadMap=function() {
+                app.maps.bgMap.collisionData = app.maps.colMap._data[0];
+                txt = app.maps.bgMap.getDataJson(app.imagePath);
+
+	       $http.post(     JOOWAR_SERVER_URL+'/api/putMap.php',                
+			       {name:$scope.uploadName,data:txt},
+			   {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}      
+		       ).
+		       success( function(text) {
+			       if(text=="Done") {
+					// do nothing
+				} else {
+					console.log("putMap failed");
+				}
+		       }).
+		       error( function() {
+				console.log("putMap error");
+		       });                                                                       
+
+	};
 
 };

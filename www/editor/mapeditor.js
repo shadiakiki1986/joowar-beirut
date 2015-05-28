@@ -1,4 +1,6 @@
-function start(mapWidth, mapHeight, gameImage, extend) {
+function start(mapWidth, mapHeight, gameImage, extend, callbackFun) {
+
+	if(!callbackFun) callbackFun=function() { };
 
     var game = new Game(640, 480);
     game.preload('ui_16.png', gameImage);
@@ -234,6 +236,7 @@ function start(mapWidth, mapHeight, gameImage, extend) {
 			bgMap.addData(makeArray(app.mapWidth, app.mapHeight, -1));
 		};
 
+		callbackFun();
     };
     game.start();
 }

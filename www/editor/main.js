@@ -2,31 +2,44 @@ var loadJsonText="";
 loadJsonCore= function(loadJsonText) {
 // loadJsonText is a javascript object after conevrsion from json
 
-	try {
-backgroundMap=app.maps.bgMap;
+	w=loadJsonText.a[0].length;
+	h=loadJsonText.a.length;
+
+	if(app.mapWidth != w || app.mapHeight != h) {
+		alert("map being loaded ("+w+","+h+") has different dimensions than initially stated ("+app.mapWidth+","+app.mapHeight+") ... treason!");
+	} else {
+		var backgroundMap = new Map(16, 16);
+var game = enchant.Game.instance;
+		backgroundMap.image = game.assets[loadJsonText.map];
 		backgroundMap.loadData(loadJsonText.a,loadJsonText.b);
 		backgroundMap.collisionData = loadJsonText.c;
-		app.mapWidth = backgroundMap._data[0][0].length;
-		app.mapHeight = backgroundMap._data[0].length;
-		app.maps.colMap.loadData(backgroundMap.collisionData);
-		var length = backgroundMap._data.length;
-		var tabs = document.getElementById('tabs');
-		var num = tabs.childNodes.length - 2;
-		if (length < num) {
-			for (var i = num; i > length; i--) {
-				tabs.removeChild(tabs.childNodes[tabs.childNodes.length - 2]);
-			}
-		} else if (length > num) {
-			for (var i = num; i < length; i++) {
-				angular.element(document.getElementById('Controller2_editorTabs')).scope().controller.addNewTab('bgtab' + i, 'layer' + i);
+		loadCore(backgroundMap);
+	}
+};
+
+loadCore=function(backgroundMap) {
+	app.mapWidth = backgroundMap._data[0][0].length;
+	app.mapHeight = backgroundMap._data[0].length;
+	app.maps.bgMap.loadData(backgroundMap.copyData(0),backgroundMap.copyData(1));
+	app.maps.colMap.loadData(backgroundMap.collisionData);
+	var length = backgroundMap._data.length;
+	var tabs = document.getElementById('tabs');
+	var num = tabs.childNodes.length - 2;
+	if (length < num) {
+		for (var i = num; i > length; i--) {
+			x=tabs.childNodes[tabs.childNodes.length - 2];
+			if(x.nodeType != 8) { // 8=Node.COMMENT_NODE
+				tabs.removeChild(x);
 			}
 		}
-		app.frame.changeSize(app.mapWidth, app.mapHeight);
-	} catch (e) {
-		console.log(e);
+	} else if (length > num) {
+		for (var i = num; i < length; i++) {
+angular.element(document.getElementById('Controller2_editorTabs')).scope().controller.addNewTab('bgtab' + i, 'layer' + i);
+		}
 	}
-
+	app.frame.changeSize(app.mapWidth, app.mapHeight);
 };
+
 
 window.onload = function() {
     var parArr = window.location.search.split("?");
@@ -39,8 +52,11 @@ window.onload = function() {
             success: function(rt) {
 		console.log(rt);
                 enchant();
-                acceptCore(30,30,'../img/map2-joowarBeirut-V20150517-1.gif',false);
-                loadJsonCore(rt);
+
+		var w = rt.a[0].length;
+		var h = rt.a.length;
+                acceptCore(w,h,rt.map,false,function() { loadJsonCore(rt); });
+                
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error loading map. "+textStatus+","+errorThrown);
@@ -51,45 +67,50 @@ window.onload = function() {
     }
 }; // end window onload
 
-acceptCore=function(wv,hv,iv,ev) {
-		app.extendMode = ev;
-		app.imagePath = iv;
-		if (!(isNaN(wv)) && !(isNaN(hv))) {
-			var edit = document.getElementById('edit');
-			app.image = document.createElement('img');
-			app.image.src = iv;
-			app.mapWidth = wv;
-			app.mapHeight = hv;
-			app.image.onload = function() {
-				if (app.extendMode && this.width != 256 || this.height != 256) {
-					alert('Please use a 256x256 tileset image');
-					return;
-				}
-				start(wv, hv, iv, ev);
+acceptCore=function(wv,hv,iv,ev,callbackFun) {
+	$("#edit").show();
 
-				// rectIcon
-				var icons = document.getElementById('rectIcon');
-				icons.draw();
-				if (app.extendMode) {
-					icons.updateStat(app.image, 0, 16, 48, 48);
-				} else {
-					icons.updateStat(app.image, 0, 0);
-				}
+	if(!callbackFun) callbackFun=function() { };
 
-				//
-				var palette = document.getElementById('paletteCanvas');
-				palette.loadImage(app.image);
-			};
-		} else {
-			alert("input number");                                                  
-		}                                                                          
+	app.extendMode = ev;
+	app.imagePath = iv;
+	if (!(isNaN(wv)) && !(isNaN(hv))) {
+		var edit = document.getElementById('edit');
+		app.image = document.createElement('img');
+		app.image.src = iv;
+		app.mapWidth = wv;
+		app.mapHeight = hv;
+		app.image.onload = function() {
+			if (app.extendMode && this.width != 256 || this.height != 256) {
+				alert('Please use a 256x256 tileset image');
+				return;
+			}
+
+			start(wv, hv, iv, ev, callbackFun);
+
+			// rectIcon
+			var icons = document.getElementById('rectIcon');
+			icons.draw();
+			if (app.extendMode) {
+				icons.updateStat(app.image, 0, 16, 48, 48);
+			} else {
+				icons.updateStat(app.image, 0, 0);
+			}
+
+			//
+			var palette = document.getElementById('paletteCanvas');
+			palette.loadImage(app.image);
+
+		};
+	} else {
+		alert("input number");                                                  
+	}                                                                          
 }; // end acceptcore
 
 $( document ).ready(function() {
 
 	$("#edit").hide();
 	$("#acceptButton").click(function() {
-		$("#edit").show();
 
 		var w = document.getElementById('widthBox');
 		var h = document.getElementById('heightBox');                               
@@ -141,7 +162,7 @@ w=window;
 		app.maps.bgMap.collisionData = app.maps.colMap._data[0];
 		txt = app.maps.bgMap.getDataJson(app.imagePath);
 		var blob = new Blob([txt], {type: "application/json"});
-		saveAs(blob, "map.js");
+		saveAs(blob, "map.json");
 	});
 
 	// icons part of window
@@ -272,22 +293,7 @@ w=window;
 				console.log(e);
 				alert(e);
 			}
-			app.mapWidth = backgroundMap._data[0][0].length;
-			app.mapHeight = backgroundMap._data[0].length;
-			app.maps.colMap.loadData(backgroundMap.collisionData);
-			var length = backgroundMap._data.length;
-			var tabs = document.getElementById('tabs');
-			var num = tabs.childNodes.length - 2;
-			if (length < num) {
-				for (var i = num; i > length; i--) {
-					tabs.removeChild(tabs.childNodes[tabs.childNodes.length - 2]);
-				}
-			} else if (length > num) {
-				for (var i = num; i < length; i++) {
-angular.element(document.getElementById('Controller2_editorTabs')).scope().controller.addNewTab('bgtab' + i, 'layer' + i);
-				}
-			}
-			app.frame.changeSize(app.mapWidth, app.mapHeight);
+			loadCore(backgroundMap);
 	//		w.close();
 		};
 		w.document.body.appendChild(input);

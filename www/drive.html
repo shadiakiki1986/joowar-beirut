@@ -1,11 +1,15 @@
 <!doctype html>
 <html>
 <head>
+        <script type="text/javascript" src="js/vendor/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="js/config.js"></script>
+
 	<script src="js/vendor/enchant-0.8.2.js"></script>
 	<script src="js/vendor/CarEngine.js"></script>
 	<script src="js/mapOriginal.js"></script>
 	<script src="js/mapLaMadonna.js"></script>
 	<script src="js/mapLaMadonna2.js"></script>
+	<script src="js/mapLaMadonna3.js"></script>
 	<script src="js/JoowarGame.js"></script>
 	<title>Joowar Beirut</title>
 </head>
@@ -16,6 +20,7 @@ mo1=null;
 switch(parArr) {
 case "mapLaMadonna": mo1=mapLaMadonna(); break;
 case "mapLaMadonna2": mo1=mapLaMadonna2(); break;
+case "mapLaMadonna3": mo1=mapLaMadonna3(); break;
 default: console.log("WTF");
 }
 var jg=new JoowarGame(mo1);

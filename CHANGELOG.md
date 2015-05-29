@@ -1,3 +1,6 @@
+2015-05-29
+* underlaying map with openstreetmap
+
 2015-05-28
 * completed 1st iteration: download map, edit, upload, drive
  * WOOHOO!
